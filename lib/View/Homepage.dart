@@ -61,14 +61,39 @@ class _HomePageState extends State<HomePage> with GlobalFun {
               itemBuilder: (context, index) {
                 final todo = _todos[index];
                 return ListTile(
-                  title: Text1(todo.title, 14, FontWeight.normal),
-                  subtitle: Text1(todo.description, 12, FontWeight.normal),
-                  trailing: IconButton(
-                    icon: Icon(
-                      todo.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: todo.isFavorite ? Colors.red : null,
+                  title: SizedBox(
+                      width: double.infinity,
+                      child: Text1(todo.title, 14, FontWeight.normal)),
+                  subtitle: SizedBox(
+                      width: double.infinity,
+                      child: Text1(todo.description, 12, FontWeight.normal)),
+                  trailing: SizedBox(
+                    width: 144,
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.edit_outlined,
+                          ),
+                          onPressed: () => _editTodo(todo),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete_outline_rounded,
+                          ),
+                          onPressed: () => _deleteTodo(index),
+                        ),
+                        IconButton(
+                          icon: Icon(
+                            todo.isFavorite
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: todo.isFavorite ? Colors.red : null,
+                          ),
+                          onPressed: () => _toggleFavorite(todo),
+                        ),
+                      ],
                     ),
-                    onPressed: () => _toggleFavorite(todo),
                   ),
                 );
               },
@@ -131,5 +156,53 @@ class _HomePageState extends State<HomePage> with GlobalFun {
             ),
           );
         });
+  }
+
+  Future<void> _deleteTodo(int id) async {
+    await _dbHelper.deleteTodo(id);
+    _fetchTodos();
+  }
+
+  Future<void> _editTodo(Todo todo) async {
+    _titleController.text = todo.title;
+    _descriptionController.text=todo.description;
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return Scaffold(
+          body: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _titleController,
+                decoration: InputDecoration(labelText: 'Edit Title'),
+              ),
+              TextField(
+                controller: _descriptionController,
+                decoration: InputDecoration(labelText: 'Edit Description'),
+              ),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_titleController.text.isNotEmpty) {
+                    Todo updatedTodo = Todo(
+                      id: todo.id,
+                      title: _titleController.text,
+                      description: _descriptionController.text,
+                      isFavorite: todo.isFavorite,
+                    );
+                    await _dbHelper.updateTodo(updatedTodo);
+                    _titleController.clear();
+                    Navigator.of(context).pop();
+                    _fetchTodos();
+                  }
+                },
+                child: Text('Save Changes'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

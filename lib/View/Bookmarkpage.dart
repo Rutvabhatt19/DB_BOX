@@ -45,4 +45,5 @@ class _BookmarkPageState extends State<BookmarkPage> with GlobalFun {
             ),
     );
   }
+
 }
