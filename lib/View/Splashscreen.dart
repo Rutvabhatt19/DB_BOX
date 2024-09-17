@@ -17,6 +17,7 @@ class _SplashScreenState extends State<SplashScreen> with GlobalFun {
     super.initState();
     _checkIfIntroScreenSeen();
   }
+
   Future<void> _checkIfIntroScreenSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool? seenIntro = prefs.getBool('seenIntro') ?? false;
@@ -39,9 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with GlobalFun {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child:Text1('DB_BOX_PROJECT',20,FontWeight.bold)
-      ),
+      body: Center(child: Text1('DB_BOX_PROJECT', 20, FontWeight.bold)),
     );
   }
 }

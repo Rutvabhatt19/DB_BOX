@@ -17,10 +17,8 @@ class DBHelper {
   }
 
   Future<Database> _initDB() async {
-    String dbPath =
-        await getDatabasesPath(); // Using path package to get the databases directory
-    String path = join(dbPath,
-        'todo_database.db'); // Joining the path to form the database path
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, 'todo_database.db');
 
     return openDatabase(
       path,

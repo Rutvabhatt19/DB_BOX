@@ -12,21 +12,24 @@ class IntroScreen extends StatelessWidget with GlobalFun {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text1('Welcome to the TODO App', 20, FontWeight.bold),
-            SizedBox(height: 100,),
+            SizedBox(
+              height: 100,
+            ),
             ElevatedButton(
               onPressed: () {
                 _setSeen();
                 Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) =>  HomePage()),
+                  MaterialPageRoute(builder: (context) => HomePage()),
                 );
               },
-              child: Text1('Get Started',15,FontWeight.normal),
+              child: Text1('Get Started', 15, FontWeight.normal),
             ),
           ],
         ),
       ),
     );
   }
+
   Future<void> _setSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('seenIntro', true);
